@@ -15,8 +15,8 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.8.0'
-  gem 'factory_bot_rails', '~> 4.10.0'
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
@@ -27,12 +27,13 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'faker', require: false # for sample data in development
   gem 'spring-commands-rspec'
+  gem 'bundle_outdated_formatter'
 end
 
 group :test do
-  gem 'capybara', '~> 2.15.4'
+  gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'chromedriver-helper'
+  gem 'webdrivers'
   # Or use poltergeist and PhantomJS as an alternative to Selenium/Chrome
   # gem 'poltergeist', '~> 1.15.0'
   gem 'launchy', '~> 2.4.3'
