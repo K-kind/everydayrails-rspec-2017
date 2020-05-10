@@ -9,25 +9,27 @@ RSpec.describe Note, type: :model do
   #   puts "User.count: #{User.count}"
   #   puts "Project.count: #{Project.count}"
   # end
+  let(:user) { FactoryBot.create(:user) }
+  let(:project) { FactoryBot.create(:project, owner: user) }
 
-  before do
-    @user = User.create(
-      first_name: "Joe",
-      last_name: "Tester",
-      email: "joetester@example.com",
-      password: "dottle-nouveau-pavilion-tights-furze"
-    )
+  # before do
+  #   @user = User.create(
+  #     first_name: "Joe",
+  #     last_name: "Tester",
+  #     email: "joetester@example.com",
+  #     password: "dottle-nouveau-pavilion-tights-furze"
+  #   )
 
-    @project = @user.projects.create(
-      name: "Test Project"
-    )
-  end
+  #   @project = @user.projects.create(
+  #     name: "Test Project"
+  #   )
+  # end
 
   it "is valid with a user, project, and message" do
     note = Note.new(
       message: "This is a sample note.",
-      user: @user,
-      project: @project,
+      user: user,
+      project: project,
     )
     expect(note).to be_valid
   end
@@ -40,17 +42,17 @@ RSpec.describe Note, type: :model do
 
   describe "search message for a term" do
     before do
-      @note1 = @project.notes.create(
+      @note1 = project.notes.create(
         message: "This is the first note.",
-        user: @user,
+        user: user,
       )
-      @note2 = @project.notes.create(
+      @note2 = project.notes.create(
         message: "This is the second note.",
-        user: @user,
+        user: user,
       )
-      @note3 = @project.notes.create(
+      @note3 = project.notes.create(
         message: "First, preheat the oven.",
-        user: @user,
+        user: user,
       )
     end
     
