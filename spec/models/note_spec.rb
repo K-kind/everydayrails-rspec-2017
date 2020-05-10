@@ -5,6 +5,8 @@ RSpec.describe Note, type: :model do
   let(:user) { FactoryBot.create(:user) }
   let(:project) { FactoryBot.create(:project, owner: user) }
 
+  it { is_expected.to have_attached_file(:attachment) }
+
   it "delegates name to the user who created it" do
     # user = FactoryBot.create(:user, first_name: "Fake", last_name: "User")
     # note = Note.new(user: user)
