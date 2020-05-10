@@ -6,6 +6,8 @@ RSpec.describe Project, type: :model do
     project.valid?
     expect(project.errors[:name]).to include "can't be blank"
   end
+  it { is_expected.to validate_presence_of :name }
+  it { is_expected.to validate_uniqueness_of(:name).scoped_to(:user_id) }
 
   it "does not allow duplicate project names per user" do
     # user = User.create(

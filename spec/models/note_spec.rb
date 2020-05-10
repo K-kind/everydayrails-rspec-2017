@@ -1,16 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Note, type: :model do
-  # it "generates associated data from a factory" do
-  #   note = FactoryBot.create(:note)
-  #   puts "This note's project is #{note.project.inspect}"
-  #   puts "This note's project's owner is #{note.project.owner.inspect}"
-  #   puts "This note's user is #{note.user.inspect}"
-  #   puts "User.count: #{User.count}"
-  #   puts "Project.count: #{Project.count}"
-  # end
+  # subject(:note) { Note.new }
   let(:user) { FactoryBot.create(:user) }
   let(:project) { FactoryBot.create(:project, owner: user) }
+
+  it "delegates name to the user who created it" do
+    # user = FactoryBot.create(:user, first_name: "Fake", last_name: "User")
+    # note = Note.new(user: user)
+    # expect(note.user_name).to eq "Fake User"
+    user = instance_double("User", name: "Fake User")
+    note = Note.new
+    allow(note).to receive(:user).and_return(user)
+    expect(note.user_name).to eq "Fake User"
+  end
 
   # before do
   #   @user = User.create(
@@ -34,11 +37,13 @@ RSpec.describe Note, type: :model do
     expect(note).to be_valid
   end
 
-  it "is invalid without a message" do
-    note = Note.new(message: nil)
-    note.valid?
-    expect(note.errors[:message]).to include("can't be blank")
-  end
+  it(focus: true) { is_expected.to validate_presence_of :message}
+
+  # it "is invalid without a message" do
+  #   note = Note.new(message: nil)
+  #   note.valid?
+  #   expect(note.errors[:message]).to include("can't be blank")
+  # end
 
   describe "search message for a term" do
     before do
