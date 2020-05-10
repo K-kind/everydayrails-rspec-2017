@@ -49,4 +49,11 @@ RSpec.describe User, type: :model do
     user = FactoryBot.build(:user, first_name: "Jon", last_name: "Doe")
     expect(user.name).to eq("Jon Doe")
   end
+
+  it "sends a welcome email on account creation" do
+    allow(UserMailer).to \
+      receive_message_chain(:welcome_email, :deliver_later)
+    user = FactoryBot.create(:user)
+    expect(UserMailer).to have_received(:welcome_email).with(user)
+  end
 end
