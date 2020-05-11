@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      # 開発環境のみsync-volumeを使用
+      # - .:/myapp:cached
+      - rspec-sync-volume:/myapp
+    ports:
+      - "3000:3000"
+    environment:
+      - "SELENIUM_DRIVER_URL=http://selenium_chrome:4444/wd/hub"
+    networks:
+      default:
+        aliases:
+          - app.local
+    command: bin/rails s -b 0.0.0.0 -p 3000
+
+  selenium_chrome:
+    image: selenium/standalone-chrome-debug
+    logging:
+      driver: none
+
+volumes:
+  rspec-sync-volume:
+    external: true
