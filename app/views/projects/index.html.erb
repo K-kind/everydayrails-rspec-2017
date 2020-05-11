@@ -5,6 +5,12 @@
     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
     New Project
   <% end %>
+
+  <% if @completed %>
+    <%= link_to "Incompleted Projects", projects_path(completed: 0), class: "btn btn-default" %>
+  <% else %>
+    <%= link_to "Completed Projects", projects_path(completed: 1), class: "btn btn-default" %>
+  <% end %>
 </h1>
 
 

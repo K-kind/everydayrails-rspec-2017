@@ -49,11 +49,49 @@ RSpec.describe "Projects", type: :system do
     end
   end
 
+  it "user completes a project" do
+    # プロジェクトを持ったユーザーを準備
+    project = FactoryBot.create(:project, name: "Project to be completed", owner: user)
+    # ユーザーはログインしている
+    sign_in user
+    # プロジェクト詳細画面でcompleteボタンを押す
+    visit project_path(project)
+    click_button "Complete"
+    # プロジェクトは完了済みとしてマークされる
+    aggregate_failures do
+      expect(project.reload.completed?).to be true
+      expect(page).to \
+        have_content "Congratulations, this project is complete!"
+      expect(page).to have_content "Completed"
+      expect(page).to_not have_button "Complete"
+    end
+    # ダッシュボードに戻る
+    visit root_path
+    # 完了済みのプロジェクトは表示されない
+    expect(page).to_not have_content "Project to be completed"
+  end
 
+  describe "projects on dashboard" do
+    before do
+      FactoryBot.create(:project, name: "Incompleted project", completed: false, owner: user)
+      FactoryBot.create(:project, name: "Completed project1", completed: true, owner: user)
+      sign_in user
+      visit root_path
+    end
 
-  # it "guest adds a project" do
-  #   visit projects_path
-  #   # save_and_open_page
-  #   click_link "New Project"
-  # end
+    it "only incompleted projects are shown by default" do
+      expect(page).to have_content "Incompleted project"
+      expect(page).to_not have_content "Completed project1"
+    end
+
+    it "projects are toggled by clicking the toggle button" do
+      click_link "Completed Projects"
+      expect(page).to_not have_content "Incompleted project"
+      expect(page).to have_content "Completed project1"
+
+      click_link "Incompleted Projects"
+      expect(page).to have_content "Incompleted project"
+      expect(page).to_not have_content "Completed project1"
+    end
+  end
 end
