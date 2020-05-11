@@ -6,7 +6,8 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = current_user.projects
+    @completed = params[:completed]
+    @projects = current_user.projects.completed_or_not(@completed.to_i)
   end
 
   # GET /projects/1
